@@ -6,6 +6,7 @@ pub mod media;
 pub mod metrics;
 pub mod ntp;
 pub mod platform;
+pub mod process;
 pub mod session;
 
 pub use config::{CredentialsStore, MirrorCipherMode, MirrorConfig, StreamConfig};
@@ -16,4 +17,5 @@ pub use media::{MediaSyncConfig, TimestampedPcmFrame};
 pub use metrics::{MirrorMetrics, MirrorMetricsSnapshot};
 pub use ntp::{init_session_clock, ntp_boot_relative_with_bias, ntp_epoch_now};
 pub use platform::running_in_wsl;
+pub use process::hidden_command;
 pub use session::{MirrorSession, SessionState};

@@ -6,6 +6,7 @@ use rotten_core::config::{
     MirrorCipherMode, MirrorConfig, StreamConfig, StreamPreset, resolve_credentials_path,
 };
 use rotten_core::debug_log::{DEBUG_BUILD_ID, agent_log};
+use rotten_core::hidden_command;
 use rotten_core::media::MediaSyncConfig;
 use rotten_discovery::{discover_devices, discover_for, resolve_device};
 use rotten_pairing::PairingManager;
@@ -189,7 +190,7 @@ impl Cli {
                     .parent()
                     .map(|directory| directory.join("airmirror-gui.exe"))
                     .ok_or_else(|| anyhow::anyhow!("cannot locate airmirror-gui.exe"))?;
-                std::process::Command::new(&gui)
+                hidden_command(&gui)
                     .spawn()
                     .map_err(|error| anyhow::anyhow!("launch {}: {error}", gui.display()))?;
             }
@@ -224,18 +225,18 @@ impl Cli {
                 );
                 println!("credentials: {}", credentials.display());
                 println!("credentials present: {}", credentials.exists());
-                let ffmpeg = std::process::Command::new("ffmpeg")
+                let ffmpeg = hidden_command("ffmpeg")
                     .args(["-hide_banner", "-version"])
                     .output();
                 let ffmpeg_available = ffmpeg.as_ref().is_ok_and(|output| output.status.success());
                 println!("ffmpeg available: {ffmpeg_available}");
                 if ffmpeg_available {
-                    let encoders = std::process::Command::new("ffmpeg")
+                    let encoders = hidden_command("ffmpeg")
                         .args(["-hide_banner", "-encoders"])
                         .output()
                         .map(|output| String::from_utf8_lossy(&output.stdout).into_owned())
                         .unwrap_or_default();
-                    let filters = std::process::Command::new("ffmpeg")
+                    let filters = hidden_command("ffmpeg")
                         .args(["-hide_banner", "-filters"])
                         .output()
                         .map(|output| String::from_utf8_lossy(&output.stdout).into_owned())

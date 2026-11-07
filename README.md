@@ -55,7 +55,8 @@ that gap with a small desktop app and a scriptable CLI:
 
 ## Build
 
-There are no release binaries yet. Build from the repository root:
+Prebuilt Windows x64 packages are stored under
+`packages/v0.4.0/windows-x64/`. Build from source with:
 
 ```powershell
 cargo build --release `
@@ -84,6 +85,21 @@ target\release\
 
 Keep `fpsap-helper.exe` next to the AirMirror executables, or make it available
 on `PATH`.
+
+## Package
+
+Create a Windows x64 archive with the application, FairPlay helper, FFmpeg,
+installer scripts, and license notices:
+
+```powershell
+.\tools\package-windows.ps1
+```
+
+The generated ZIP and SHA-256 checksum are written to:
+
+```text
+packages/v0.4.0/windows-x64/
+```
 
 ## Quick Start
 
@@ -193,7 +209,7 @@ Known limitations:
 - OpenH264 is best suited to 1080p and lower frame rates.
 - 2K/4K high-refresh streaming depends on FFmpeg, NVENC, and NVIDIA hardware.
 - AAC-ELD negotiation, long-duration audio validation, and VAAPI are incomplete.
-- No installer, tray application, or auto-update flow is provided yet.
+- No MSI, code-signed installer, tray application, or auto-update flow is provided yet.
 
 ## Troubleshooting
 

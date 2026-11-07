@@ -1,7 +1,9 @@
-use std::process::{Child, Command, Stdio};
+use std::process::{Child, Stdio};
+use std::sync::OnceLock;
 use std::sync::mpsc::{Receiver, sync_channel};
 
 use rotten_core::error::{Result, RottenError};
+use rotten_core::hidden_command;
 
 use crate::ffmpeg_encoder::read_access_units;
 
@@ -19,14 +21,19 @@ pub struct FfmpegDirectCapture {
 
 impl FfmpegDirectCapture {
     pub fn available() -> bool {
-        let Ok(output) = Command::new("ffmpeg")
-            .args(["-hide_banner", "-filters"])
-            .output()
-        else {
-            return false;
-        };
-        String::from_utf8_lossy(&output.stdout).contains("ddagrab")
-            && crate::ffmpeg_encoder::FfmpegNvencEncoder::available()
+        static AVAILABLE: OnceLock<bool> = OnceLock::new();
+        *AVAILABLE.get_or_init(|| {
+            if !crate::ffmpeg_encoder::FfmpegNvencEncoder::available() {
+                return false;
+            }
+            let Ok(output) = hidden_command("ffmpeg")
+                .args(["-hide_banner", "-filters"])
+                .output()
+            else {
+                return false;
+            };
+            String::from_utf8_lossy(&output.stdout).contains("ddagrab")
+        })
     }
 
     pub fn start(
@@ -46,7 +53,7 @@ impl FfmpegDirectCapture {
         let fps = fps.max(1);
         let bitrate = bitrate_kbps.max(500).saturating_mul(1000);
         let gop = fps.saturating_mul(2);
-        let mut command = Command::new("ffmpeg");
+        let mut command = hidden_command("ffmpeg");
         command.args([
             "-hide_banner",
             "-nostats",
@@ -108,12 +115,6 @@ impl FfmpegDirectCapture {
             .stdin(Stdio::null())
             .stdout(Stdio::piped())
             .stderr(Stdio::inherit());
-        #[cfg(windows)]
-        {
-            use std::os::windows::process::CommandExt;
-            command.creation_flags(0x0800_0000);
-        }
-
         let mut child = command
             .spawn()
             .map_err(|error| RottenError::Capture(format!("start ddagrab NVENC: {error}")))?;

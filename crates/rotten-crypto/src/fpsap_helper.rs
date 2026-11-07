@@ -2,11 +2,12 @@
 
 use std::io::Write;
 use std::path::PathBuf;
-use std::process::{Command, Stdio};
+use std::process::Stdio;
 use std::sync::Mutex;
 
 use rotten_core::debug_log::agent_log;
 use rotten_core::error::{Result, RottenError};
+use rotten_core::hidden_command;
 
 include!(concat!(env!("OUT_DIR"), "/fpsap_embed.rs"));
 
@@ -36,7 +37,7 @@ pub fn fpsap_hash_from_setup1(setup1: &[u8]) -> Result<[u8; 20]> {
 
     let hex_in = hex::encode(setup1);
 
-    let mut child = Command::new(&helper)
+    let mut child = hidden_command(&helper)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())

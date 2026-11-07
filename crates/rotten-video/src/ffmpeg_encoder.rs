@@ -1,9 +1,11 @@
 use std::collections::VecDeque;
 use std::io::{Read, Write};
-use std::process::{Child, Command, Stdio};
+use std::process::{Child, Stdio};
+use std::sync::OnceLock;
 use std::sync::mpsc::{Receiver, SyncSender, sync_channel};
 
 use rotten_core::error::{Result, RottenError};
+use rotten_core::hidden_command;
 
 use crate::encoder::{EncodedFrame, EncoderTrait, HwEncoderKind};
 use crate::mirror_packet::nal_type_summary;
@@ -33,13 +35,16 @@ pub struct FfmpegNvencEncoder {
 
 impl FfmpegNvencEncoder {
     pub fn available() -> bool {
-        let Ok(output) = Command::new("ffmpeg")
-            .args(["-hide_banner", "-encoders"])
-            .output()
-        else {
-            return false;
-        };
-        String::from_utf8_lossy(&output.stdout).contains("h264_nvenc")
+        static AVAILABLE: OnceLock<bool> = OnceLock::new();
+        *AVAILABLE.get_or_init(|| {
+            let Ok(output) = hidden_command("ffmpeg")
+                .args(["-hide_banner", "-encoders"])
+                .output()
+            else {
+                return false;
+            };
+            String::from_utf8_lossy(&output.stdout).contains("h264_nvenc")
+        })
     }
 
     pub fn new(width: u32, height: u32, bitrate_kbps: u32, fps: u32) -> Result<Self> {
@@ -51,7 +56,7 @@ impl FfmpegNvencEncoder {
 
         let bitrate = bitrate_kbps.max(500).saturating_mul(1000);
         let gop = fps.max(1).saturating_mul(2);
-        let mut command = Command::new("ffmpeg");
+        let mut command = hidden_command("ffmpeg");
         command.args([
             "-hide_banner",
             "-loglevel",
@@ -113,12 +118,6 @@ impl FfmpegNvencEncoder {
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .stderr(Stdio::inherit());
-        #[cfg(windows)]
-        {
-            use std::os::windows::process::CommandExt;
-            command.creation_flags(0x0800_0000);
-        }
-
         let mut child = command
             .spawn()
             .map_err(|error| RottenError::Video(format!("start ffmpeg NVENC: {error}")))?;
