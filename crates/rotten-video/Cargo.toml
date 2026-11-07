@@ -1,0 +1,23 @@
+[package]
+name = "rotten-video"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+bytes = { workspace = true }
+futures = { workspace = true }
+openh264 = { version = "0.8", optional = true, default-features = false }
+hex = { workspace = true }
+rotten-core = { workspace = true }
+rotten-crypto = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+
+[features]
+default = []
+software-encode-source = ["dep:openh264", "openh264/source"]
+software-encode-dll = ["dep:openh264", "openh264/libloading"]
+hw-nvenc = []
+hw-vaapi = []

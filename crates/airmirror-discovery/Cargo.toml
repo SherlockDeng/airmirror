@@ -1,0 +1,11 @@
+[package]
+name = "airmirror-discovery"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+airmirror-core.workspace = true
+mdns-sd.workspace = true
+thiserror.workspace = true

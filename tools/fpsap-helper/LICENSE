@@ -1,0 +1,8 @@
+GNU GENERAL PUBLIC LICENSE Version 3
+
+This directory contains FairPlay SAP hash code derived from
+https://github.com/omarroth/doubletake (GPL-3.0).
+
+The fpsap-helper binary is GPL-3.0. It is built and distributed separately
+from the MIT-licensed rottingapple application, which invokes it as a
+subprocess only.

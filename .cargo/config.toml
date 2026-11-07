@@ -1,0 +1,13 @@
+[build]
+target-dir = "target"
+
+[net]
+git-fetch-with-cli = true
+
+[term]
+color = "auto"
+
+[alias]
+check-all = "check --workspace --all-targets"
+test-all = "test --workspace --all-targets"
+lint = "clippy --workspace --all-targets -- -D warnings"

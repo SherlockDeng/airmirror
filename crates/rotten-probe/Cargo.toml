@@ -1,0 +1,13 @@
+[package]
+name = "rotten-probe"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "rottingapple-probe"
+path = "src/main.rs"
+
+[dependencies]
+rotten-core = { workspace = true }
+serde_json = { workspace = true }

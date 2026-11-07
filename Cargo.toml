@@ -1,0 +1,76 @@
+[workspace]
+members = [
+    "crates/airmirror-airplay",
+    "crates/airmirror-cli",
+    "crates/airmirror-core",
+    "crates/airmirror-discovery",
+    "crates/airmirror-windows",
+    "crates/rotten-app",
+    "crates/rotten-capture",
+    "crates/rotten-core",
+    "crates/rotten-crypto",
+    "crates/rotten-discovery",
+    "crates/rotten-pairing",
+    "crates/rotten-probe",
+    "crates/rotten-protocol",
+    "crates/rotten-video",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.4.0"
+edition = "2024"
+rust-version = "1.99"
+license = "GPL-3.0-or-later"
+authors = ["AirMirror contributors"]
+
+[workspace.dependencies]
+airmirror-airplay = { path = "crates/airmirror-airplay" }
+airmirror-core = { path = "crates/airmirror-core" }
+airmirror-discovery = { path = "crates/airmirror-discovery" }
+airmirror-windows = { path = "crates/airmirror-windows" }
+aes = "0.8"
+alac-encoder = "0.3"
+aes-gcm = "0.10"
+anyhow = "1.0.104"
+async-trait = "0.1"
+base64 = "0.22"
+bytes = "1"
+chacha20 = { version = "0.10", features = ["legacy"] }
+chacha20poly1305 = "0.10"
+clap = { version = "4.6.7", features = ["derive", "env"] }
+ctr = "0.9"
+dirs = "6"
+eframe = { version = "0.37", default-features = false, features = ["glow", "default_fonts"] }
+ed25519-dalek = { version = "2", features = ["rand_core"] }
+futures = "0.3"
+hex = "0.4"
+hkdf = "0.12"
+hmac = "0.12"
+log = "0.4"
+mdns-sd = "0.21.7"
+num-bigint = "0.4"
+num-traits = "0.2"
+p256 = { version = "0.13", features = ["ecdh"] }
+plist = "1.10.3"
+poly1305 = { version = "0.8", features = ["std"] }
+rand = "0.8"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+rotten-app = { path = "crates/rotten-app" }
+rotten-capture = { path = "crates/rotten-capture" }
+rotten-core = { path = "crates/rotten-core" }
+rotten-crypto = { path = "crates/rotten-crypto" }
+rotten-discovery = { path = "crates/rotten-discovery" }
+rotten-pairing = { path = "crates/rotten-pairing" }
+rotten-protocol = { path = "crates/rotten-protocol" }
+rotten-video = { path = "crates/rotten-video" }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+sha1 = "0.10"
+sha2 = "0.10"
+thiserror = "2.0.21"
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+uuid = { version = "1", features = ["v4"] }
+x25519-dalek = { version = "2", features = ["static_secrets"] }

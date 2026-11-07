@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: tools/fpsap-helper/go.mod
+          cache-dependency-path: tools/fpsap-helper/go.mod
+      - name: Format
+        run: >
+          cargo fmt
+          --package rotten-app
+          --package rotten-core
+          --package rotten-pairing
+          --package rotten-crypto
+          --package rotten-video
+          --package airmirror
+          -- --check
+      - name: Test
+        run: cargo test --workspace
+      - name: Build release
+        run: >
+          cargo build --release
+          --bin airmirror
+          --bin airmirror-gui
+          --bin airmirror-receiver-info
+      - name: Build FairPlay helper
+        working-directory: tools/fpsap-helper
+        run: go build -trimpath -o ../../target/release/fpsap-helper.exe .
+      - name: Verify helper
+        shell: pwsh
+        run: |
+          if (-not (Test-Path target/release/fpsap-helper.exe)) {
+            throw "fpsap-helper.exe is missing from the release directory"
+          }
+          if (-not (Test-Path target/release/airmirror.exe)) {
+            throw "airmirror.exe is missing from the release directory"
+          }
+          if (-not (Test-Path target/release/airmirror-gui.exe)) {
+            throw "airmirror-gui.exe is missing from the release directory"
+          }

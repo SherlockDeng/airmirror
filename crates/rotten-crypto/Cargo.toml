@@ -1,0 +1,27 @@
+[package]
+name = "rotten-crypto"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+aes = { workspace = true }
+ctr = { workspace = true }
+async-trait = { workspace = true }
+base64 = { workspace = true }
+chacha20 = { workspace = true }
+chacha20poly1305 = { workspace = true }
+fpsap-rs = { path = "../../third_party/fpsap-rs" }
+poly1305 = { workspace = true }
+ed25519-dalek = { workspace = true }
+hex = { workspace = true }
+hkdf = { workspace = true }
+rand = { workspace = true }
+rotten-core = { workspace = true }
+serde_json = { workspace = true }
+sha2 = { workspace = true }
+thiserror = { workspace = true }
+x25519-dalek = { workspace = true }
+
+[build-dependencies]
+cc = "1"

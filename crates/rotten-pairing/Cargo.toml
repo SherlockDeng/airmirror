@@ -1,0 +1,12 @@
+[package]
+name = "rotten-pairing"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+base64 = { workspace = true }
+hex = { workspace = true }
+rotten-core = { workspace = true }
+rotten-crypto = { workspace = true }
+tokio = { workspace = true }

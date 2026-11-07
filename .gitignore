@@ -1,0 +1,44 @@
+# Rust build output
+/target/
+**/*.rs.bk
+
+# Local development, research, and captured protocol artifacts
+/work/
+/tools/disasm_symbol.py
+/third_party/rottingapple/
+
+# Editor and operating-system metadata
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db
+
+# Local agent instructions and tool state
+AGENTS.md
+CLAUDE.md
+.agents/
+.codex/
+.cursor/
+
+# Secrets and machine-local pairing state
+.env
+.env.*
+*.key
+*.p12
+*.pem
+credentials.json
+**/credentials.json
+
+# Compiled binaries and crash dumps
+*.dll
+*.dmp
+*.exe
+*.lib
+*.obj
+*.pdb
+
+# Logs and network/debug captures
+*.etl
+*.log
+*.pcap
+*.pcapng
